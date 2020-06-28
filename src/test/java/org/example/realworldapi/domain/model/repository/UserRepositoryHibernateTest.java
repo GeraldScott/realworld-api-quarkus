@@ -13,164 +13,166 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
+@SuppressWarnings("deprecation")
 @QuarkusTest
 public class UserRepositoryHibernateTest extends DatabaseIntegrationTest {
 
-  private UserRepository userRepository;
+	private UserRepository userRepository;
 
-  @BeforeEach
-  public void beforeEach() {
-    userRepository = new UserRepositoryHibernate(entityManager);
-  }
 
-  @AfterEach
-  public void afterEach() {
-    clear();
-  }
+	@BeforeEach
+	public void beforeEach() {
+		userRepository = new UserRepositoryHibernate(entityManager);
+	}
 
-  @Test
-  public void shouldCreateAnUser() {
+	@AfterEach
+	public void afterEach() {
+		clear();
+	}
 
-    User user = UserUtils.create("user", "user@mail.com", "123");
+	@Test
+	public void shouldCreateAnUser() {
 
-    User result = transaction(() -> userRepository.create(user));
+		User user = UserUtils.create("user", "user@mail.com", "123");
 
-    transaction(() -> Assertions.assertNotNull(entityManager.find(User.class, result.getId())));
-  }
+		User result = transaction(() -> userRepository.create(user));
 
-  @Test
-  public void shouldReturnAUserByEmail() {
+		transaction(() -> Assertions.assertNotNull(entityManager.find(User.class, result.getId())));
+	}
 
-    User existingUser = createUser("user1", "user@mail.com", "123");
+	@Test
+	public void shouldReturnAUserByEmail() {
 
-    Optional<User> result =
-        transaction(() -> userRepository.findUserByEmail(existingUser.getEmail()));
+		User existingUser = createUser("user1", "user@mail.com", "123");
 
-    Assertions.assertEquals(existingUser.getEmail(), result.orElse(new User()).getEmail());
-  }
+		Optional<User> result =
+				transaction(() -> userRepository.findUserByEmail(existingUser.getEmail()));
 
-  @Test
-  public void givenAExistingEmail_shouldReturnTrue() {
+		Assertions.assertEquals(existingUser.getEmail(), result.orElse(new User()).getEmail());
+	}
 
-    User existingUser = createUser("user1", "user@mail.com", "123");
+	@Test
+	public void givenAExistingEmail_shouldReturnTrue() {
 
-    transaction(
-        () -> Assertions.assertTrue(userRepository.existsBy("email", existingUser.getEmail())));
-  }
+		User existingUser = createUser("user1", "user@mail.com", "123");
 
-  @Test
-  public void givenAExistingUsername_shouldReturnTrue() {
+		transaction(
+				() -> Assertions.assertTrue(userRepository.existsBy("email", existingUser.getEmail())));
+	}
 
-    User existingUser = createUser("user1", "user@mail.com", "123");
+	@Test
+	public void givenAExistingUsername_shouldReturnTrue() {
 
-    transaction(
-        () ->
-            Assertions.assertTrue(userRepository.existsBy("username", existingUser.getUsername())));
-  }
+		User existingUser = createUser("user1", "user@mail.com", "123");
 
-  @Test
-  public void givenAInexistentEmail_shouldReturnFalse() {
+		transaction(
+				() ->
+				Assertions.assertTrue(userRepository.existsBy("username", existingUser.getUsername())));
+	}
 
-    String email = "user@mail.com";
+	@Test
+	public void givenAInexistentEmail_shouldReturnFalse() {
 
-    transaction(() -> Assertions.assertFalse(userRepository.existsBy("email", email)));
-  }
+		String email = "user@mail.com";
 
-  @Test
-  public void givenAInexistentUsername_shouldReturnFalse() {
+		transaction(() -> Assertions.assertFalse(userRepository.existsBy("email", email)));
+	}
 
-    String username = "user1";
+	@Test
+	public void givenAInexistentUsername_shouldReturnFalse() {
 
-    transaction(() -> Assertions.assertFalse(userRepository.existsBy("username", username)));
-  }
+		String username = "user1";
 
-  @Test
-  public void givenAnotherExistingUsername_shouldReturnTrue() {
+		transaction(() -> Assertions.assertFalse(userRepository.existsBy("username", username)));
+	}
 
-    User otherUser = createUser("user1", "user@mail.com", "123");
+	@Test
+	public void givenAnotherExistingUsername_shouldReturnTrue() {
 
-    User currentUser = createUser("currentUser", "currentUser@mail.com", "123");
+		User otherUser = createUser("user1", "user@mail.com", "123");
 
-    transaction(
-        () ->
-            Assertions.assertTrue(
-                userRepository.existsUsername(currentUser.getId(), otherUser.getUsername())));
-  }
+		User currentUser = createUser("currentUser", "currentUser@mail.com", "123");
 
-  @Test
-  public void givenInexistentUsername_shouldReturnFalse() {
+		transaction(
+				() ->
+				Assertions.assertTrue(
+						userRepository.existsUsername(currentUser.getId(), otherUser.getUsername())));
+	}
 
-    User currentUser = createUser("currentUser", "currentUser@mail.com", "123");
+	@Test
+	public void givenInexistentUsername_shouldReturnFalse() {
 
-    transaction(
-        () ->
-            Assertions.assertFalse(
-                userRepository.existsUsername(currentUser.getId(), "superusername")));
-  }
+		User currentUser = createUser("currentUser", "currentUser@mail.com", "123");
 
-  @Test
-  public void shouldReturnFalseWhenUseCurrentUserUsername() {
+		transaction(
+				() ->
+				Assertions.assertFalse(
+						userRepository.existsUsername(currentUser.getId(), "superusername")));
+	}
 
-    User currentUser = createUser("currentUser", "currentUser@mail.com", "123");
+	@Test
+	public void shouldReturnFalseWhenUseCurrentUserUsername() {
 
-    transaction(
-        () ->
-            Assertions.assertFalse(
-                userRepository.existsUsername(currentUser.getId(), currentUser.getUsername())));
-  }
+		User currentUser = createUser("currentUser", "currentUser@mail.com", "123");
 
-  @Test
-  public void givenAnotherExistingEmail_shouldReturnTrue() {
+		transaction(
+				() ->
+				Assertions.assertFalse(
+						userRepository.existsUsername(currentUser.getId(), currentUser.getUsername())));
+	}
 
-    User otherUser = createUser("user1", "user@mail.com", "123");
+	@Test
+	public void givenAnotherExistingEmail_shouldReturnTrue() {
 
-    User currentUser = createUser("currentUser", "currentUser@mail.com", "123");
+		User otherUser = createUser("user1", "user@mail.com", "123");
 
-    transaction(
-        () ->
-            Assertions.assertTrue(
-                userRepository.existsEmail(currentUser.getId(), otherUser.getEmail())));
-  }
+		User currentUser = createUser("currentUser", "currentUser@mail.com", "123");
 
-  @Test
-  public void givenInexistentEmail_shouldReturnFalse() {
+		transaction(
+				() ->
+				Assertions.assertTrue(
+						userRepository.existsEmail(currentUser.getId(), otherUser.getEmail())));
+	}
 
-    User currentUser = createUser("currentUser", "currentUser@mail.com", "123");
+	@Test
+	public void givenInexistentEmail_shouldReturnFalse() {
 
-    transaction(
-        () ->
-            Assertions.assertFalse(
-                userRepository.existsEmail(currentUser.getId(), "user@mail.com")));
-  }
+		User currentUser = createUser("currentUser", "currentUser@mail.com", "123");
 
-  @Test
-  public void shouldReturnFalseWhenUseCurrentEmail() {
+		transaction(
+				() ->
+				Assertions.assertFalse(
+						userRepository.existsEmail(currentUser.getId(), "user@mail.com")));
+	}
 
-    User currentUser = createUser("currentUser", "currentUser@mail.com", "123");
+	@Test
+	public void shouldReturnFalseWhenUseCurrentEmail() {
 
-    transaction(
-        () ->
-            Assertions.assertFalse(
-                userRepository.existsEmail(currentUser.getId(), currentUser.getEmail())));
-  }
+		User currentUser = createUser("currentUser", "currentUser@mail.com", "123");
 
-  @Test
-  public void givenValidUsername_shouldReturnUser() {
+		transaction(
+				() ->
+				Assertions.assertFalse(
+						userRepository.existsEmail(currentUser.getId(), currentUser.getEmail())));
+	}
 
-    User user = createUser("user", "user@mail.com", "123");
+	@Test
+	public void givenValidUsername_shouldReturnUser() {
 
-    transaction(
-        () ->
-            Assertions.assertTrue(
-                userRepository.findByUsernameOptional(user.getUsername()).isPresent()));
-  }
+		User user = createUser("user", "user@mail.com", "123");
 
-  private User createUser(String username, String email, String password, Role... role) {
-    return transaction(
-        () -> {
-          User user = UserUtils.create(username, email, password);
-          entityManager.persist(user);
-          return user;
-        });
-  }
+		transaction(
+				() ->
+				Assertions.assertTrue(
+						userRepository.findByUsernameOptional(user.getUsername()).isPresent()));
+	}
+
+	private User createUser(String username, String email, String password, Role... role) {
+		return transaction(
+				() -> {
+					User user = UserUtils.create(username, email, password);
+					entityManager.persist(user);
+					return user;
+				});
+	}
 }

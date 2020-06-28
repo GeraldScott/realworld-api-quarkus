@@ -2,4 +2,8 @@ package org.example.realworldapi.infrastructure.web.exception;
 
 import org.example.realworldapi.domain.model.exception.BusinessException;
 
-public class ForbiddenException extends BusinessException {}
+public class ForbiddenException extends BusinessException {
+
+	private static final long serialVersionUID = -1905468288381744922L;
+	
+}
