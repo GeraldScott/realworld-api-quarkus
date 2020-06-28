@@ -1,38 +1,58 @@
 package org.example.realworldapi.domain.model.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import javax.persistence.*;
 import java.util.Objects;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "FOLLOWED_USERS")
 public class UsersFollowed {
-  @EmbeddedId private UsersFollowedKey primaryKey;
+	
+	@EmbeddedId private UsersFollowedKey primaryKey;
 
-  @ManyToOne
-  @JoinColumn(insertable = false, updatable = false)
-  private User user;
+	@ManyToOne
+	@JoinColumn(insertable = false, updatable = false)
+	private User user;
 
-  @ManyToOne
-  @JoinColumn(insertable = false, updatable = false)
-  private User followed;
+	@ManyToOne
+	@JoinColumn(insertable = false, updatable = false)
+	private User followed;
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
+	public UsersFollowedKey getPrimaryKey() {
+		return primaryKey;
+	}
 
-    if (o == null || getClass() != o.getClass()) return false;
+	public void setPrimaryKey(UsersFollowedKey primaryKey) {
+		this.primaryKey = primaryKey;
+	}
 
-    UsersFollowed that = (UsersFollowed) o;
-    return Objects.equals(primaryKey, that.primaryKey);
-  }
+	public User getUser() {
+		return user;
+	}
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(primaryKey);
-  }
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public User getFollowed() {
+		return followed;
+	}
+
+	public void setFollowed(User followed) {
+		this.followed = followed;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+
+		if (o == null || getClass() != o.getClass()) return false;
+
+		UsersFollowed that = (UsersFollowed) o;
+		return Objects.equals(primaryKey, that.primaryKey);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(primaryKey);
+	}
 }

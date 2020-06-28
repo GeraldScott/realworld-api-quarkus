@@ -1,44 +1,68 @@
 package org.example.realworldapi.domain.model.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.persistence.*;
 import java.util.Objects;
 
-@Getter
-@Setter
-@NoArgsConstructor
 @Entity
 @Table(name = "ARTICLES_TAGS")
 public class ArticlesTags {
-  @EmbeddedId private ArticlesTagsKey primaryKey;
 
-  public ArticlesTags(ArticlesTagsKey primaryKey) {
-    this.primaryKey = primaryKey;
-  }
+	@EmbeddedId 
+	private ArticlesTagsKey primaryKey;
 
-  @ManyToOne
-  @JoinColumn(insertable = false, updatable = false)
-  private Article article;
+	public ArticlesTags(ArticlesTagsKey primaryKey) {
+		this.primaryKey = primaryKey;
+	}
 
-  @ManyToOne
-  @JoinColumn(insertable = false, updatable = false)
-  private Tag tag;
+	@ManyToOne
+	@JoinColumn(insertable = false, updatable = false)
+	private Article article;
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
+	@ManyToOne
+	@JoinColumn(insertable = false, updatable = false)
+	private Tag tag;
 
-    if (o == null || getClass() != o.getClass()) return false;
 
-    ArticlesTags that = (ArticlesTags) o;
-    return Objects.equals(primaryKey, that.primaryKey);
-  }
+	public ArticlesTags() {
+		super();
+	}
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(primaryKey);
-  }
+	public ArticlesTagsKey getPrimaryKey() {
+		return primaryKey;
+	}
+
+	public void setPrimaryKey(ArticlesTagsKey primaryKey) {
+		this.primaryKey = primaryKey;
+	}
+
+	public Article getArticle() {
+		return article;
+	}
+
+	public void setArticle(Article article) {
+		this.article = article;
+	}
+
+	public Tag getTag() {
+		return tag;
+	}
+
+	public void setTag(Tag tag) {
+		this.tag = tag;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+
+		if (o == null || getClass() != o.getClass()) return false;
+
+		ArticlesTags that = (ArticlesTags) o;
+		return Objects.equals(primaryKey, that.primaryKey);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(primaryKey);
+	}
 }

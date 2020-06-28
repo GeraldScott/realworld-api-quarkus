@@ -1,39 +1,58 @@
 package org.example.realworldapi.domain.model.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import javax.persistence.*;
 import java.util.Objects;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "ARTICLES_USERS")
 public class ArticlesUsers {
 
-  @EmbeddedId private ArticlesUsersKey primaryKey;
+	@EmbeddedId private ArticlesUsersKey primaryKey;
 
-  @ManyToOne
-  @JoinColumn(insertable = false, updatable = false)
-  private Article article;
+	@ManyToOne
+	@JoinColumn(insertable = false, updatable = false)
+	private Article article;
 
-  @ManyToOne
-  @JoinColumn(insertable = false, updatable = false)
-  private User user;
+	@ManyToOne
+	@JoinColumn(insertable = false, updatable = false)
+	private User user;
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
+	public ArticlesUsersKey getPrimaryKey() {
+		return primaryKey;
+	}
 
-    if (o == null || getClass() != o.getClass()) return false;
+	public void setPrimaryKey(ArticlesUsersKey primaryKey) {
+		this.primaryKey = primaryKey;
+	}
 
-    ArticlesUsers that = (ArticlesUsers) o;
-    return Objects.equals(primaryKey, that.primaryKey);
-  }
+	public Article getArticle() {
+		return article;
+	}
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(primaryKey);
-  }
+	public void setArticle(Article article) {
+		this.article = article;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+
+		if (o == null || getClass() != o.getClass()) return false;
+
+		ArticlesUsers that = (ArticlesUsers) o;
+		return Objects.equals(primaryKey, that.primaryKey);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(primaryKey);
+	}
 }

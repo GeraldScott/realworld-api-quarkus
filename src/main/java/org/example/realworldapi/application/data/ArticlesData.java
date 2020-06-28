@@ -1,17 +1,35 @@
 package org.example.realworldapi.application.data;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class ArticlesData {
-  private List<ArticleData> articles;
-  private long articlesCount;
+	private List<ArticleData> articles;
+	private long articlesCount;
+	
+	public ArticlesData() {
+		super();
+	}
+	
+	public ArticlesData(List<ArticleData> articles, long articlesCount) {
+		super();
+		this.articles = articles;
+		this.articlesCount = articlesCount;
+	}
+	
+	public List<ArticleData> getArticles() {
+		return articles;
+	}
+	
+	public void setArticles(List<ArticleData> articles) {
+		this.articles = articles;
+	}
+	
+	public long getArticlesCount() {
+		return articlesCount;
+	}
+	
+	public void setArticlesCount(long articlesCount) {
+		this.articlesCount = articlesCount;
+	}
+
 }
